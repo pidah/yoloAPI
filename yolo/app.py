@@ -7,7 +7,7 @@ from core import db, oauth
 from views import yoloapi
 
 
-def create_app(settings_override=None):
+def create_app(settings_override=None, testing=None):
     """ Method for creating and initializing application.
 
         :param settings_override: Dictionary of settings to override.
@@ -18,6 +18,7 @@ def create_app(settings_override=None):
     app.config.from_object('settings')
     app.config.from_pyfile('settings.cfg', silent=True)
     app.config.from_object(settings_override)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize extensions on the application.
     db.init_app(app)
@@ -41,4 +42,4 @@ if __name__ == '__main__':
     # Create app and SQL schemas in database, then run the application.
     app = create_app()
     db.create_all(app=app)
-    app.run(ssl_context='adhoc')
+    app.run(host="0.0.0.0")

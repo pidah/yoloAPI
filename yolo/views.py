@@ -4,9 +4,14 @@
 from flask import Blueprint, render_template, request
 from models import Client, User
 from core import oauth
+from flask_oauthlib.provider.oauth2 import log
 
 yoloapi = Blueprint('yoloApi', __name__)
 
+@yoloapi.before_request
+def log_request_info():
+    log.info('Headers: %s', request.headers)
+    log.info('Body: %s', request.get_data())
 
 @yoloapi.route('/oauth/token', methods=['POST'])
 @oauth.token_handler
